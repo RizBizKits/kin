@@ -4,6 +4,7 @@ const PORT = 3000;
 import bodyParser from 'body-parser';
 const cors = require('cors');
 require('dotenv').config();
+require('./app/passport');
 
 import "reflect-metadata";
 import { routes as apiRoutes } from './app/routes/index';

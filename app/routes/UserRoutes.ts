@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import UserController from '../controllers/UserController';
 import AuthenticationController from '../controllers/AuthenticationController';
-
+const isAuth = require('../isAuth');
 
 const router = Router();
 

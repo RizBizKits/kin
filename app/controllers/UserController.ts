@@ -15,6 +15,7 @@ class UserController {
     }
     public static fetchById = (req: Request, res: Response, next: NextFunction) => {
         const id:string = req.params.id;
+
         serviceChunk.index(id).then(user => {
             if (user) {
                 res.status(200).send({user})

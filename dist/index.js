@@ -9,6 +9,7 @@ const PORT = 3000;
 const body_parser_1 = __importDefault(require("body-parser"));
 const cors = require('cors');
 require('dotenv').config();
+require('./app/passport');
 require("reflect-metadata");
 const index_1 = require("./app/routes/index");
 //DB

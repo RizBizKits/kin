@@ -13,16 +13,16 @@ export class CentresModel {
     @Column("varchar",{length:255, nullable: true})
     public centreName:string;
 
-    @Column()
+    @Column("varchar",{length:255, nullable: true})
     public houseNumber: string;
 
-    @Column()
+    @Column("varchar",{length:255, nullable: true})
     public streetName: string;
 
-    @Column()
+    @Column("varchar",{length:255, nullable: true})
     public town: string;
 
-    @Column()
+    @Column("varchar",{length:255, nullable: true})
     public postcode: string;
 
     @Column("varchar", {length:255, nullable:true})
