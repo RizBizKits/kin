@@ -37,5 +37,21 @@ UserController.register = (req, res, next) => {
         });
     });
 };
+UserController.bookUserAppointment = (req, res, next) => {
+    const userID = req.params.id;
+    const { appointments } = req.body;
+    console.log("your req is", appointments);
+    // console.log("your req is", req.body);
+    serviceChunk.addAppointmentToUser(req.body, userID).then(user => {
+        if (user) {
+            res.status(200).send({ user });
+            return console.log("user is created");
+        }
+    }).catch(err => {
+        res.status(400).send({
+            error: 'A centre already exists...'
+        });
+    });
+};
 exports.default = UserController;
 //# sourceMappingURL=UserController.js.map

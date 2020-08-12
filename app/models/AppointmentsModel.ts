@@ -9,20 +9,21 @@ export class AppointmentsModel {
     @PrimaryGeneratedColumn()
     public id: number;
 
-    @Column({ unique: true })
-    public email:string;
+    @Column({type: "datetime", default: () => "CURRENT_TIMESTAMP", nullable: true})
+    public appointmentSlot: Date;
 
-    @Column({type: "datetime", default: () => "CURRENT_TIMESTAMP"})
-    public appointmentSlot: Date
-
-    @Column()
-    @CreateDateColumn()
-    public createdAt: Date;
+    @Column({default: null, nullable: true})
+    public isBooked: boolean;
 
     @ManyToOne(() => CentresModel, centres => centres.appointments)
     public centre: CentresModel;
 
     @ManyToOne(() => UserModel, users => users.appointments)
     public user: UserModel;
+
+    @Column()
+    @CreateDateColumn()
+    public createdAt: Date;
+
 
 }

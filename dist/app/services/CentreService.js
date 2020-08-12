@@ -10,6 +10,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 const CentresModel_1 = require("../models/CentresModel");
 const typeorm_1 = require("typeorm");
+const AppointmentsModel_1 = require("../models/AppointmentsModel");
 class CentreService {
     get() {
         return __awaiter(this, void 0, void 0, function* () {
@@ -20,6 +21,44 @@ class CentreService {
                 return centres;
             }
             catch (error) {
+                return null;
+            }
+        });
+    }
+    getByTown(data) {
+        return __awaiter(this, void 0, void 0, function* () {
+            // Get users from database
+            try {
+                const centreRepository = typeorm_1.getRepository(CentresModel_1.CentresModel);
+                console.log("THIS IS THE ARGUMENT: " + data);
+                const centres = yield centreRepository.createQueryBuilder('CentresModel')
+                    .leftJoinAndSelect('CentresModel.appointments', 'AppointmentsModel')
+                    .where("CentresModel.town = :town", { town: data })
+                    .getMany();
+                console.log("LOGGING OUTPUT = " + centres);
+                return centres;
+            }
+            catch (error) {
+                console.log("no centres found by town....");
+                return null;
+            }
+        });
+    }
+    getById(id) {
+        return __awaiter(this, void 0, void 0, function* () {
+            // Get users from database
+            try {
+                const centreRepository = typeorm_1.getRepository(CentresModel_1.CentresModel);
+                console.log("THIS IS THE ID: " + id);
+                const centre = yield centreRepository.createQueryBuilder('CentresModel')
+                    .leftJoinAndSelect('CentresModel.appointments', 'AppointmentsModel')
+                    .where("CentresModel.id = :id", { id: id })
+                    .getOne();
+                console.log("LOGGING OUTPUT = " + centre);
+                return centre;
+            }
+            catch (error) {
+                console.log("no centres found by town....");
                 return null;
             }
         });
@@ -44,6 +83,52 @@ class CentreService {
             }
             catch (e) {
                 console.log("Can't add centre....");
+                console.log(e);
+                return Promise.reject(new Error("User already exists!"));
+            }
+        });
+    }
+    listAppByCentre_s(data, id) {
+        return __awaiter(this, void 0, void 0, function* () {
+            // Get users from database
+            try {
+                const centreRepository = typeorm_1.getRepository(CentresModel_1.CentresModel);
+                console.log("THIS IS THE ID: " + id);
+                const centre = yield centreRepository.createQueryBuilder('CentresModel')
+                    .leftJoinAndSelect('CentresModel.appointments', 'AppointmentsModel')
+                    .where("CentresModel.id = :id", { id: id })
+                    .getOne();
+                console.log("LOGGING OUTPUT = " + centre);
+                return centre;
+            }
+            catch (error) {
+                console.log("no centres found by town....");
+                return null;
+            }
+        });
+    }
+    addAppointmentToCentre_s(data, id) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const centreRepo = typeorm_1.getRepository(CentresModel_1.CentresModel);
+                console.log("try in service");
+                console.log(data.appointments);
+                const chosenCentre = yield centreRepo.findOne(id);
+                const appointmentsRepo = typeorm_1.getRepository(AppointmentsModel_1.AppointmentsModel);
+                const appointment = new AppointmentsModel_1.AppointmentsModel();
+                appointment.appointmentSlot = data.appointments.appointmentSlot;
+                const savedAppointment = yield appointmentsRepo.insert(appointment);
+                console.log("appointment test printing: ");
+                console.log([appointment]);
+                // chosenUser.appointments = [appointment];
+                chosenCentre.appointments.push(appointment);
+                const savedCentre = yield centreRepo.save(chosenCentre);
+                console.log("saved centre in centre model is: " + savedCentre);
+                console.log("done creating..");
+                return savedCentre;
+            }
+            catch (e) {
+                console.log("CATCH IN SERVICE!!!  ");
                 console.log(e);
                 return Promise.reject(new Error("User already exists!"));
             }

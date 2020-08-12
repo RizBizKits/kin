@@ -10,13 +10,19 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 const UserModel_1 = require("../models/UserModel");
 const typeorm_1 = require("typeorm");
+const AppointmentsModel_1 = require("../models/AppointmentsModel");
 class UserService {
     get() {
         return __awaiter(this, void 0, void 0, function* () {
             // Get users from database
             try {
                 const userRepository = typeorm_1.getRepository(UserModel_1.UserModel);
-                const users = yield userRepository.find({});
+                const users = yield userRepository.find({
+                    relations: ["appointments"]
+                });
+                // let classes = await this.find({
+                //     relations: [ "students" ]
+                // });
                 return users;
             }
             catch (error) {
@@ -68,6 +74,51 @@ class UserService {
                 console.log("CATCH IN SERVICE!!!  ");
                 console.log(e);
                 return Promise.reject(new Error("User already exists!"));
+            }
+        });
+    }
+    addAppointmentToUser(data, id) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const userRepository = typeorm_1.getRepository(UserModel_1.UserModel);
+                console.log("try in service");
+                console.log(data.appointments);
+                const chosenUser = yield userRepository.findOne(id);
+                const appointmentsRepo = typeorm_1.getRepository(AppointmentsModel_1.AppointmentsModel);
+                const appointment = new AppointmentsModel_1.AppointmentsModel();
+                appointment.appointmentSlot = data.appointments.appointmentSlot;
+                const savedAppointment = yield appointmentsRepo.insert(appointment);
+                console.log("appointment test printing: ");
+                console.log([appointment]);
+                // chosenUser.appointments = [appointment];
+                chosenUser.appointments.push(appointment);
+                const savedUser = yield userRepository.save(chosenUser);
+                console.log("saved user in user model is: " + savedUser);
+                console.log("done creating..");
+                return savedUser;
+            }
+            catch (e) {
+                console.log("CATCH IN SERVICE!!!  ");
+                console.log(e);
+                return Promise.reject(new Error("User already exists!"));
+            }
+        });
+    }
+    loadUserAppointments(data) {
+        return __awaiter(this, void 0, void 0, function* () {
+            // Get users from database
+            try {
+                const userRepository = typeorm_1.getRepository(UserModel_1.UserModel);
+                const users = yield userRepository.find({
+                    relations: ["appointments"]
+                });
+                // let classes = await this.find({
+                //     relations: [ "students" ]
+                // });
+                return users;
+            }
+            catch (error) {
+                return null;
             }
         });
     }

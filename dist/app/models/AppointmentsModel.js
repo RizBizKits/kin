@@ -19,18 +19,13 @@ __decorate([
     __metadata("design:type", Number)
 ], AppointmentsModel.prototype, "id", void 0);
 __decorate([
-    typeorm_1.Column({ unique: true }),
-    __metadata("design:type", String)
-], AppointmentsModel.prototype, "email", void 0);
-__decorate([
-    typeorm_1.Column({ type: "datetime", default: () => "CURRENT_TIMESTAMP" }),
+    typeorm_1.Column({ type: "datetime", default: () => "CURRENT_TIMESTAMP", nullable: true }),
     __metadata("design:type", Date)
 ], AppointmentsModel.prototype, "appointmentSlot", void 0);
 __decorate([
-    typeorm_1.Column(),
-    typeorm_1.CreateDateColumn(),
-    __metadata("design:type", Date)
-], AppointmentsModel.prototype, "createdAt", void 0);
+    typeorm_1.Column({ default: null, nullable: true }),
+    __metadata("design:type", Boolean)
+], AppointmentsModel.prototype, "isBooked", void 0);
 __decorate([
     typeorm_1.ManyToOne(() => CentresModel_1.CentresModel, centres => centres.appointments),
     __metadata("design:type", CentresModel_1.CentresModel)
@@ -39,6 +34,11 @@ __decorate([
     typeorm_1.ManyToOne(() => UserModel_1.UserModel, users => users.appointments),
     __metadata("design:type", UserModel_1.UserModel)
 ], AppointmentsModel.prototype, "user", void 0);
+__decorate([
+    typeorm_1.Column(),
+    typeorm_1.CreateDateColumn(),
+    __metadata("design:type", Date)
+], AppointmentsModel.prototype, "createdAt", void 0);
 AppointmentsModel = __decorate([
     typeorm_1.Entity()
 ], AppointmentsModel);

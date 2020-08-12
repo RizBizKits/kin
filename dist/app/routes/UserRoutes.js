@@ -11,6 +11,9 @@ const router = express_1.Router();
 // Get all users
 router.get('/', UserController_1.default.listAll);
 router.get('/:id', UserController_1.default.fetchById);
+// router.get('/:id/appointments', AppointmentsController.listByUser);
+router.post('/:id/appointments', UserController_1.default.bookUserAppointment);
+// router.get('/:id/appointments', UserController.getByUser);
 router.post('/register', UserController_1.default.register);
 router.post('/login', AuthenticationController_1.default.login);
 exports.default = router;

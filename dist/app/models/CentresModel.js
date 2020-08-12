@@ -22,19 +22,19 @@ __decorate([
     __metadata("design:type", String)
 ], CentresModel.prototype, "centreName", void 0);
 __decorate([
-    typeorm_1.Column(),
+    typeorm_1.Column("varchar", { length: 255, nullable: true }),
     __metadata("design:type", String)
 ], CentresModel.prototype, "houseNumber", void 0);
 __decorate([
-    typeorm_1.Column(),
+    typeorm_1.Column("varchar", { length: 255, nullable: true }),
     __metadata("design:type", String)
 ], CentresModel.prototype, "streetName", void 0);
 __decorate([
-    typeorm_1.Column(),
+    typeorm_1.Column("varchar", { length: 255, nullable: true }),
     __metadata("design:type", String)
 ], CentresModel.prototype, "town", void 0);
 __decorate([
-    typeorm_1.Column(),
+    typeorm_1.Column("varchar", { length: 255, nullable: true }),
     __metadata("design:type", String)
 ], CentresModel.prototype, "postcode", void 0);
 __decorate([

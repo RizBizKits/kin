@@ -2,6 +2,7 @@ import { CentresModel } from "../models/CentresModel";
 import { getRepository } from 'typeorm';
 import { Request } from 'express';
 import {UserModel} from "../models/UserModel";
+import {AppointmentsModel} from "../models/AppointmentsModel";
 
 export class CentreService {
     async get(): Promise<CentresModel[] | null> {
@@ -15,6 +16,47 @@ export class CentreService {
             return null
         }
     }
+
+    async getByTown(data:string): Promise<CentresModel[] | null> {
+        // Get users from database
+        try {
+            const centreRepository = getRepository(CentresModel);
+            console.log("THIS IS THE ARGUMENT: " + data);
+
+            const centres = await centreRepository.createQueryBuilder('CentresModel')
+                .leftJoinAndSelect('CentresModel.appointments', 'AppointmentsModel')
+                .where("CentresModel.town = :town", {town: data})
+                .getMany();
+
+            console.log("LOGGING OUTPUT = " + centres);
+            return centres;
+        }
+        catch (error) {
+            console.log("no centres found by town....");
+            return null
+        }
+    }
+
+    async getById(id): Promise<CentresModel | null> {
+        // Get users from database
+        try {
+            const centreRepository = getRepository(CentresModel);
+            console.log("THIS IS THE ID: " + id);
+
+            const centre = await centreRepository.createQueryBuilder('CentresModel')
+                .leftJoinAndSelect('CentresModel.appointments', 'AppointmentsModel')
+                .where("CentresModel.id = :id", {id: id})
+                .getOne();
+
+            console.log("LOGGING OUTPUT = " + centre);
+            return centre;
+        }
+        catch (error) {
+            console.log("no centres found by town....");
+            return null
+        }
+    }
+
 
     async add(data:any): Promise<CentresModel | null> {
         try {
@@ -41,5 +83,62 @@ export class CentreService {
             console.log(e);
             return Promise.reject(new Error("User already exists!"));
         }
+    }
+
+    async listAppByCentre_s(data, id): Promise<CentresModel | null> {
+        // Get users from database
+        try {
+            const centreRepository = getRepository(CentresModel);
+            console.log("THIS IS THE ID: " + id);
+
+            const centre = await centreRepository.createQueryBuilder('CentresModel')
+                .leftJoinAndSelect('CentresModel.appointments', 'AppointmentsModel')
+                .where("CentresModel.id = :id", {id: id})
+                .getOne();
+
+            console.log("LOGGING OUTPUT = " + centre);
+            return centre;
+        }
+        catch (error) {
+            console.log("no centres found by town....");
+            return null
+        }
+    }
+
+    async addAppointmentToCentre_s(data:any, id): Promise<CentresModel | null> {
+
+        try {
+            const centreRepo = getRepository(CentresModel);
+            console.log("try in service");
+
+            console.log(data.appointments);
+            const chosenCentre = await centreRepo.findOne(id);
+
+            const appointmentsRepo = getRepository(AppointmentsModel);
+            const appointment = new AppointmentsModel();
+
+            appointment.appointmentSlot = data.appointments.appointmentSlot;
+
+            const savedAppointment = await appointmentsRepo.insert(appointment);
+
+            console.log("appointment test printing: ");
+            console.log([appointment]);
+
+            // chosenUser.appointments = [appointment];
+            chosenCentre.appointments.push(appointment);
+
+            const savedCentre = await centreRepo.save(chosenCentre);
+
+            console.log("saved centre in centre model is: " + savedCentre);
+            console.log("done creating..");
+
+            return savedCentre;
+
+        } catch (e) {
+            console.log("CATCH IN SERVICE!!!  ")
+            console.log(e);
+            return Promise.reject(new Error("User already exists!"));
+        }
+
     }
 }
