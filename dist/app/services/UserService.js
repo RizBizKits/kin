@@ -95,6 +95,7 @@ class UserService {
                 console.log("REQ APP:::");
                 console.log(data.appointmentSlot);
                 appointment.appointmentSlot = data.appointmentSlot;
+                appointment.isBooked = true;
                 console.log("TYPE OF APP:::");
                 console.log(typeof chosenUser["appointments"]);
                 // chosenUser.appointments = [appointment];
@@ -109,20 +110,6 @@ class UserService {
                 console.log(typeof chosenUser);
                 console.log(typeof appointment);
                 console.log("USER'S APP: ", appointment);
-                // await chosenUser.appointments.push(appointment);
-                // await chosenUser["appointments"].push(appointment);
-                // let app = []
-                //
-                // app.push(data)
-                // Object.entries(appointments);
-                // console.log(data.appointments);
-                //
-                // let obj = JSON.parse(data);
-                // await obj["appointments"].push(appointment);
-                // data["appointments"].push(appointment);
-                // chosenUser.appointments = data;
-                // chosenUser.appointments = data.appointments;
-                // chosenUser["appointments"].push(appointment);
                 const savedUser = yield userRepository.save(chosenUser);
                 console.log("saved user in user model is: ", savedUser);
                 console.log("done creating..");

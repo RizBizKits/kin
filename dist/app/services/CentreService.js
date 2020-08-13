@@ -96,11 +96,44 @@ class CentreService {
             try {
                 const centreRepository = typeorm_1.getRepository(CentresModel_1.CentresModel);
                 console.log("THIS IS THE ID: " + id);
-                const centre = yield centreRepository.createQueryBuilder('CentresModel')
-                    .leftJoinAndSelect('CentresModel.appointments', 'AppointmentsModel')
-                    .where("CentresModel.id = :id", { id: id })
-                    .getOne();
-                console.log("LOGGING OUTPUT = " + centre);
+                // const centre = await centreRepository.createQueryBuilder('CentresModel')
+                //     .leftJoinAndSelect('CentresModel.appointments', 'AppointmentsModel')
+                //     .where("CentresModel.id = :id", {id: id})
+                //     .andWhere("AppointmentsModel.isBooked = :isBooked", {isBooked: 1})
+                //     .getOne();
+                // const centres = await centreRepository.find({
+                //     relations: ["appointments"],
+                //     id: id,
+                //     isBooked: true
+                // });
+                const centre = yield centreRepository.findOne({
+                    join: { alias: 'centre', innerJoin: { appointments: 'centre.appointments' } },
+                    where: qb => {
+                        qb.where({
+                            id: id
+                        }).andWhere('appointments.isBooked = :isBooked', { isBooked: null });
+                    }
+                });
+                // const centre = await centreRepository.createQueryBuilder()
+                //     .select("centre.id", "id")
+                //     .addSelect(subQuery => {
+                //         return subQuery
+                //             .select("appointments.isBooked", "isBooked")
+                //             .from(AppointmentsModel, "AppointmentsModel")
+                //             .limit(1);
+                //     }, "name")
+                //     .from(CentresModel, "CentresModel")
+                //     .getOne();
+                // const centre = await centreRepository.findOne({
+                //     where: {id},
+                //     relations: ["appointments"]
+                // })
+                // const centre = await centreRepository.createQueryBuilder('CentresModel')
+                //     .leftJoinAndSelect('CentresModel.appointments', 'AppointmentsModel')
+                //     .where("CentresModel.id = :id", {id: id})
+                //     .orWhere("CentresModel.id = :id", {id: 92})
+                //     .getOne();
+                console.log("LOGGING SQL = ", centre);
                 return centre;
             }
             catch (error) {
@@ -113,29 +146,15 @@ class CentreService {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 const centreRepo = typeorm_1.getRepository(CentresModel_1.CentresModel);
-                console.log("try in service");
-                console.log(data.appointments);
-                const chosenCentre = yield centreRepo.findOne(id);
-                console.log("CHOSEN CENTRE", chosenCentre);
                 const appointmentsRepo = typeorm_1.getRepository(AppointmentsModel_1.AppointmentsModel);
+                const chosenCentre = yield centreRepo.findOne(id, {
+                    relations: ["appointments"]
+                });
                 const appointment = new AppointmentsModel_1.AppointmentsModel();
-                appointment.appointmentSlot = data.appointments.appointmentSlot;
-                const savedAppointment = yield appointmentsRepo.insert(appointment);
-                console.log("appointment test printing: ");
-                console.log(appointment);
-                console.log(typeof data);
-                const appObj = JSON.parse(data);
-                appObj["appointments"].push(appointment);
-                // if (chosenCentre.appointments === undefined) {
-                //     chosenCentre.appointments = [appointment];
-                //     console.log("APP NOT DEFINED");
-                // } else {
-                //     chosenCentre.appointments.push(appointment);
-                //     console.log("APP IS DEFINED");
-                // }
+                appointment.appointmentSlot = data.appointmentSlot;
+                chosenCentre.appointments.push(appointment);
+                yield appointmentsRepo.insert(appointment);
                 const savedCentre = yield centreRepo.save(chosenCentre);
-                console.log("saved centre in centre model is: " + savedCentre);
-                console.log("done creating..");
                 return savedCentre;
             }
             catch (e) {

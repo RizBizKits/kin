@@ -41,12 +41,12 @@ class AppointmentsController {
         })
     }
 
-    public static addAppToUser = (req: Request, res: Response, next: any) => {
+    public static addUserToApp = (req: Request, res: Response, next: any) => {
 
         const userID = req.params.id;
         console.log("YOU REQ IS:::: ", req.body);
 
-        serviceChunk.addAppToUser_s(req.body, userID).then(appointment => {
+        serviceChunk.addUserToApp_s(req.body, userID).then(appointment => {
             if (appointment) {
                 res.status(200).send({appointment})
                 return console.log("user is created");

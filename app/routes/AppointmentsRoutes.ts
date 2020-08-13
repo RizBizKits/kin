@@ -7,8 +7,7 @@ const router = Router();
 router.get('/', AppointmentsController.listAll);
 router.get('/:id', AppointmentsController.listByUser);
 
-router.post('/:id', AppointmentsController.addAppToUser);
-
+router.post('/:id', AppointmentsController.addUserToApp);
 
 
 // router.get('/:town', AppointmentsController.listByTown);

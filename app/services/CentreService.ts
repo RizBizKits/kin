@@ -93,12 +93,56 @@ export class CentreService {
             const centreRepository = getRepository(CentresModel);
             console.log("THIS IS THE ID: " + id);
 
-            const centre = await centreRepository.createQueryBuilder('CentresModel')
-                .leftJoinAndSelect('CentresModel.appointments', 'AppointmentsModel')
-                .where("CentresModel.id = :id", {id: id})
-                .getOne();
+            // const centre = await centreRepository.createQueryBuilder('CentresModel')
+            //     .leftJoinAndSelect('CentresModel.appointments', 'AppointmentsModel')
+            //     .where("CentresModel.id = :id", {id: id})
+            //     .andWhere("AppointmentsModel.isBooked = :isBooked", {isBooked: 1})
+            //     .getOne();
 
-            console.log("LOGGING OUTPUT = " + centre);
+
+            // const centres = await centreRepository.find({
+            //     relations: ["appointments"],
+            //     id: id,
+            //     isBooked: true
+            // });
+
+            const centre = await centreRepository.findOne({
+                join: { alias: 'centre', innerJoin: { appointments: 'centre.appointments' } },
+                where: qb => {
+                    qb.where({
+                        id: id
+                    }).andWhere('appointments.isBooked = :isBooked', { isBooked: null });
+                }
+            });
+
+            // const centre = await centreRepository.createQueryBuilder()
+            //     .select("centre.id", "id")
+            //     .addSelect(subQuery => {
+            //         return subQuery
+            //             .select("appointments.isBooked", "isBooked")
+            //             .from(AppointmentsModel, "AppointmentsModel")
+            //             .limit(1);
+            //     }, "name")
+            //     .from(CentresModel, "CentresModel")
+            //     .getOne();
+
+
+
+            // const centre = await centreRepository.findOne({
+            //     where: {id},
+            //     relations: ["appointments"]
+            // })
+
+
+            // const centre = await centreRepository.createQueryBuilder('CentresModel')
+            //     .leftJoinAndSelect('CentresModel.appointments', 'AppointmentsModel')
+            //     .where("CentresModel.id = :id", {id: id})
+            //     .orWhere("CentresModel.id = :id", {id: 92})
+            //     .getOne();
+
+
+            console.log("LOGGING SQL = ", centre);
+
             return centre;
         }
         catch (error) {
@@ -111,41 +155,20 @@ export class CentreService {
 
         try {
             const centreRepo = getRepository(CentresModel);
-            console.log("try in service");
-
-            console.log(data.appointments);
-            const chosenCentre = await centreRepo.findOne(id);
-
-            console.log("CHOSEN CENTRE", chosenCentre);
-
             const appointmentsRepo = getRepository(AppointmentsModel);
+            const chosenCentre = await centreRepo.findOne(id,{
+                relations:["appointments"]
+            });
+
             const appointment = new AppointmentsModel();
 
-            appointment.appointmentSlot = data.appointments.appointmentSlot;
+            appointment.appointmentSlot = data.appointmentSlot;
 
-            const savedAppointment = await appointmentsRepo.insert(appointment);
+            chosenCentre.appointments.push(appointment);
 
-            console.log("appointment test printing: ");
-            console.log(appointment);
-
-            console.log(typeof data);
-            const appObj = JSON.parse(data);
-
-            appObj["appointments"].push(appointment);
-
-            // if (chosenCentre.appointments === undefined) {
-            //     chosenCentre.appointments = [appointment];
-            //     console.log("APP NOT DEFINED");
-            // } else {
-            //     chosenCentre.appointments.push(appointment);
-            //     console.log("APP IS DEFINED");
-            // }
+            await appointmentsRepo.insert(appointment);
 
             const savedCentre = await centreRepo.save(chosenCentre);
-
-            console.log("saved centre in centre model is: " + savedCentre);
-            console.log("done creating..");
-
             return savedCentre;
 
         } catch (e) {

@@ -9,7 +9,7 @@ const router = express_1.Router();
 // Get all users
 router.get('/', AppointmentsController_1.default.listAll);
 router.get('/:id', AppointmentsController_1.default.listByUser);
-router.post('/:id', AppointmentsController_1.default.addAppToUser);
+router.post('/:id', AppointmentsController_1.default.addUserToApp);
 // router.get('/:town', AppointmentsController.listByTown);
 // router.get('/:town/:id', AppointmentsController.listById);
 //

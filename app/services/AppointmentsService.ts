@@ -64,25 +64,27 @@ export class AppointmentsService {
         }
     }
 
-    async addAppToUser_s(data:any, id): Promise<AppointmentsModel | null> {
+
+
+    async addUserToApp_s(data:any, id): Promise<AppointmentsModel | null> {
 
         try {
 
             console.log("try in service");
 
+            const appID = data.id;
+            console.log("appointment id: ", appID);
+
             const appointmentRepo = getRepository(AppointmentsModel);
             const userRepository = getRepository(UserModel);
 
-            console.log(typeof data)
-
-            console.log(data.appointmentSlot);
             const chosenUser = await userRepository.findOne(id);
+            const chosenAppointment = await appointmentRepo.findOne(appID, {relations: ["user"]});
 
-            const appointment = new AppointmentsModel();
-            appointment.appointmentSlot = data.appointmentSlot;
-            appointment.user = chosenUser;
+            chosenAppointment.user = chosenUser;
+            chosenAppointment.isBooked = true;
 
-            const savedAppointment = await appointmentRepo.save(appointment);
+            const savedAppointment = await appointmentRepo.save(chosenAppointment);
 
             console.log("done creating..");
 
@@ -95,6 +97,38 @@ export class AppointmentsService {
         }
 
     }
+
+    // async addAppToUser_s(data:any, id): Promise<AppointmentsModel | null> {
+    //
+    //     try {
+    //
+    //         console.log("try in service");
+    //
+    //         const appointmentRepo = getRepository(AppointmentsModel);
+    //         const userRepository = getRepository(UserModel);
+    //
+    //         console.log(typeof data)
+    //
+    //         console.log(data.appointmentSlot);
+    //         const chosenUser = await userRepository.findOne(id);
+    //
+    //         const appointment = new AppointmentsModel();
+    //         appointment.appointmentSlot = data.appointmentSlot;
+    //         appointment.user = chosenUser;
+    //
+    //         const savedAppointment = await appointmentRepo.save(appointment);
+    //
+    //         console.log("done creating..");
+    //
+    //         return savedAppointment;
+    //
+    //     } catch (e) {
+    //         console.log("CATCH IN SERVICE!!!  ")
+    //         console.log(e);
+    //         return Promise.reject(new Error("User already exists!"));
+    //     }
+    //
+    // }
 
     // async add(data:any): Promise<AppointmentsModel | null> {
     //     try {

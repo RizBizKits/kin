@@ -33,10 +33,10 @@ AppointmentsController.listByCentre = (req, res, next) => {
         next(new Error('No appointments found...'));
     });
 };
-AppointmentsController.addAppToUser = (req, res, next) => {
+AppointmentsController.addUserToApp = (req, res, next) => {
     const userID = req.params.id;
     console.log("YOU REQ IS:::: ", req.body);
-    serviceChunk.addAppToUser_s(req.body, userID).then(appointment => {
+    serviceChunk.addUserToApp_s(req.body, userID).then(appointment => {
         if (appointment) {
             res.status(200).send({ appointment });
             return console.log("user is created");

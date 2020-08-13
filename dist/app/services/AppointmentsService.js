@@ -63,19 +63,19 @@ class AppointmentsService {
             }
         });
     }
-    addAppToUser_s(data, id) {
+    addUserToApp_s(data, id) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 console.log("try in service");
+                const appID = data.id;
+                console.log("appointment id: ", appID);
                 const appointmentRepo = typeorm_1.getRepository(AppointmentsModel_1.AppointmentsModel);
                 const userRepository = typeorm_1.getRepository(UserModel_1.UserModel);
-                console.log(typeof data);
-                console.log(data.appointmentSlot);
                 const chosenUser = yield userRepository.findOne(id);
-                const appointment = new AppointmentsModel_1.AppointmentsModel();
-                appointment.appointmentSlot = data.appointmentSlot;
-                appointment.user = chosenUser;
-                const savedAppointment = yield appointmentRepo.save(appointment);
+                const chosenAppointment = yield appointmentRepo.findOne(appID, { relations: ["user"] });
+                chosenAppointment.user = chosenUser;
+                chosenAppointment.isBooked = true;
+                const savedAppointment = yield appointmentRepo.save(chosenAppointment);
                 console.log("done creating..");
                 return savedAppointment;
             }
