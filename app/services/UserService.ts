@@ -89,7 +89,7 @@ export class UserService {
 
             console.log(typeof data)
             console.log(data.appointmentSlot);
-            const chosenUser = await userRepository.findOne(id);
+            const chosenUser = await userRepository.findOne(id, {relations: ["appointments"]});
 
             const appointment = new AppointmentsModel();
 
@@ -99,7 +99,16 @@ export class UserService {
 
             appointment.appointmentSlot = data.appointmentSlot;
 
-            chosenUser.appointments = [appointment];
+            console.log("TYPE OF APP:::");
+
+            console.log(typeof chosenUser["appointments"]);
+            // chosenUser.appointments = [appointment];
+
+            chosenUser.appointments.push(appointment);
+            // chosenUser.appointments.push(appointment);
+
+            // let obj = JSON.parse(data);
+            // obj["appointments"].push(appointment);
 
 
             const savedAppointment = await appointmentsRepo.insert(appointment);
