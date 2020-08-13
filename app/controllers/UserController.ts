@@ -47,7 +47,7 @@ class UserController {
 
         console.log("your req is", appointments);
 
-        // console.log("your req is", req.body);
+        console.log("your req is", req.body);
 
         serviceChunk.addAppointmentToUser(req.body, userID).then(user => {
             if (user) {

@@ -17,7 +17,9 @@ class CentreService {
             // Get users from database
             try {
                 const centreRepository = typeorm_1.getRepository(CentresModel_1.CentresModel);
-                const centres = yield centreRepository.find({});
+                const centres = yield centreRepository.find({
+                    relations: ["appointments"]
+                });
                 return centres;
             }
             catch (error) {
@@ -114,14 +116,23 @@ class CentreService {
                 console.log("try in service");
                 console.log(data.appointments);
                 const chosenCentre = yield centreRepo.findOne(id);
+                console.log("CHOSEN CENTRE", chosenCentre);
                 const appointmentsRepo = typeorm_1.getRepository(AppointmentsModel_1.AppointmentsModel);
                 const appointment = new AppointmentsModel_1.AppointmentsModel();
                 appointment.appointmentSlot = data.appointments.appointmentSlot;
                 const savedAppointment = yield appointmentsRepo.insert(appointment);
                 console.log("appointment test printing: ");
-                console.log([appointment]);
-                // chosenUser.appointments = [appointment];
-                chosenCentre.appointments.push(appointment);
+                console.log(appointment);
+                console.log(typeof data);
+                const appObj = JSON.parse(data);
+                appObj["appointments"].push(appointment);
+                // if (chosenCentre.appointments === undefined) {
+                //     chosenCentre.appointments = [appointment];
+                //     console.log("APP NOT DEFINED");
+                // } else {
+                //     chosenCentre.appointments.push(appointment);
+                //     console.log("APP IS DEFINED");
+                // }
                 const savedCentre = yield centreRepo.save(chosenCentre);
                 console.log("saved centre in centre model is: " + savedCentre);
                 console.log("done creating..");

@@ -41,7 +41,7 @@ UserController.bookUserAppointment = (req, res, next) => {
     const userID = req.params.id;
     const { appointments } = req.body;
     console.log("your req is", appointments);
-    // console.log("your req is", req.body);
+    console.log("your req is", req.body);
     serviceChunk.addAppointmentToUser(req.body, userID).then(user => {
         if (user) {
             res.status(200).send({ user });

@@ -73,6 +73,7 @@ export class AppointmentsService {
             const appointmentRepo = getRepository(AppointmentsModel);
             const userRepository = getRepository(UserModel);
 
+            console.log(typeof data)
 
             console.log(data.appointmentSlot);
             const chosenUser = await userRepository.findOne(id);

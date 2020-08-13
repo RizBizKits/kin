@@ -29,7 +29,11 @@ export class UserService {
 
             console.log("TRYING INDEX IN USER SERVICE....")
             const userRepository = getRepository(UserModel);
-            const user = await userRepository.findByIds([data]);
+            // const user = await userRepository.findByIds([data]);
+            const user = await userRepository.findByIds([data],{
+                relations:["appointments"]
+            });
+
             return user;
         }
         catch (error) {
@@ -74,28 +78,69 @@ export class UserService {
     async addAppointmentToUser(data:any, id): Promise<UserModel | null> {
 
         try {
-            const userRepository = getRepository(UserModel);
+
             console.log("try in service");
 
-            console.log(data.appointments);
+            const userRepository = getRepository(UserModel);
+            const appointmentsRepo = getRepository(AppointmentsModel);
+
+
+            // const {appointments} = data;
+
+            console.log(typeof data)
+            console.log(data.appointmentSlot);
             const chosenUser = await userRepository.findOne(id);
 
-            const appointmentsRepo = getRepository(AppointmentsModel);
             const appointment = new AppointmentsModel();
 
-            appointment.appointmentSlot = data.appointments.appointmentSlot;
+            console.log("LOAD APP:", appointment.appointmentSlot);
+            console.log("REQ APP:::");
+            console.log(data.appointmentSlot);
+
+            appointment.appointmentSlot = data.appointmentSlot;
+
+            chosenUser.appointments = [appointment];
+
 
             const savedAppointment = await appointmentsRepo.insert(appointment);
 
             console.log("appointment test printing: ");
             console.log([appointment]);
 
-            // chosenUser.appointments = [appointment];
-            chosenUser.appointments.push(appointment);
+            console.log("CHOSEN USER: ", chosenUser);
+
+            console.log(typeof chosenUser);
+            console.log(typeof appointment);
+
+            console.log("USER'S APP: ", appointment);
+
+
+            // await chosenUser.appointments.push(appointment);
+            // await chosenUser["appointments"].push(appointment);
+
+            // let app = []
+            //
+            // app.push(data)
+
+            // Object.entries(appointments);
+
+
+            // console.log(data.appointments);
+
+            //
+            // let obj = JSON.parse(data);
+            // await obj["appointments"].push(appointment);
+
+            // data["appointments"].push(appointment);
+            // chosenUser.appointments = data;
+
+            // chosenUser.appointments = data.appointments;
+            // chosenUser["appointments"].push(appointment);
+
 
             const savedUser = await userRepository.save(chosenUser);
 
-            console.log("saved user in user model is: " + savedUser);
+            console.log("saved user in user model is: ", savedUser);
             console.log("done creating..");
 
             return savedUser;

@@ -69,6 +69,7 @@ class AppointmentsService {
                 console.log("try in service");
                 const appointmentRepo = typeorm_1.getRepository(AppointmentsModel_1.AppointmentsModel);
                 const userRepository = typeorm_1.getRepository(UserModel_1.UserModel);
+                console.log(typeof data);
                 console.log(data.appointmentSlot);
                 const chosenUser = yield userRepository.findOne(id);
                 const appointment = new AppointmentsModel_1.AppointmentsModel();

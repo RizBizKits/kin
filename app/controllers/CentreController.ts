@@ -90,6 +90,8 @@ class CentreController {
 
         const centreID = req.params.id;
         console.log("YOU REQ IS:::: ", req.body);
+        const {appointments} = req.body;
+        console.log("APPOINTMENTS ARE :::: ", appointments);
 
         serviceChunk.addAppointmentToCentre_s(req.body, centreID).then(centre => {
             if (centre) {

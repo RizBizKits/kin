@@ -8,8 +8,11 @@ export class AppointmentsModel {
 
     @PrimaryGeneratedColumn()
     public id: number;
+    //
+    // @Column({type: "datetime", default: () => "CURRENT_TIMESTAMP", nullable: true})
+    // public appointmentSlot: Date;
 
-    @Column({type: "datetime", default: () => "CURRENT_TIMESTAMP", nullable: true})
+    @Column({type: "datetime", nullable: true})
     public appointmentSlot: Date;
 
     @Column({default: null, nullable: true})

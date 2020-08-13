@@ -19,7 +19,7 @@ __decorate([
     __metadata("design:type", Number)
 ], AppointmentsModel.prototype, "id", void 0);
 __decorate([
-    typeorm_1.Column({ type: "datetime", default: () => "CURRENT_TIMESTAMP", nullable: true }),
+    typeorm_1.Column({ type: "datetime", nullable: true }),
     __metadata("design:type", Date)
 ], AppointmentsModel.prototype, "appointmentSlot", void 0);
 __decorate([

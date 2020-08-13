@@ -9,7 +9,9 @@ export class CentreService {
         // Get users from database
         try {
             const centreRepository = getRepository(CentresModel);
-            const centres = await centreRepository.find({});
+            const centres = await centreRepository.find({
+                relations: ["appointments"]
+            });
             return centres;
         }
         catch (error) {
@@ -114,6 +116,8 @@ export class CentreService {
             console.log(data.appointments);
             const chosenCentre = await centreRepo.findOne(id);
 
+            console.log("CHOSEN CENTRE", chosenCentre);
+
             const appointmentsRepo = getRepository(AppointmentsModel);
             const appointment = new AppointmentsModel();
 
@@ -122,10 +126,20 @@ export class CentreService {
             const savedAppointment = await appointmentsRepo.insert(appointment);
 
             console.log("appointment test printing: ");
-            console.log([appointment]);
+            console.log(appointment);
 
-            // chosenUser.appointments = [appointment];
-            chosenCentre.appointments.push(appointment);
+            console.log(typeof data);
+            const appObj = JSON.parse(data);
+
+            appObj["appointments"].push(appointment);
+
+            // if (chosenCentre.appointments === undefined) {
+            //     chosenCentre.appointments = [appointment];
+            //     console.log("APP NOT DEFINED");
+            // } else {
+            //     chosenCentre.appointments.push(appointment);
+            //     console.log("APP IS DEFINED");
+            // }
 
             const savedCentre = await centreRepo.save(chosenCentre);
 
