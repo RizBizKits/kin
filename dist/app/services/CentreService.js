@@ -7,10 +7,14 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 const CentresModel_1 = require("../models/CentresModel");
 const typeorm_1 = require("typeorm");
 const AppointmentsModel_1 = require("../models/AppointmentsModel");
+const moment_1 = __importDefault(require("moment"));
 class CentreService {
     get() {
         return __awaiter(this, void 0, void 0, function* () {
@@ -90,51 +94,30 @@ class CentreService {
             }
         });
     }
-    listAppByCentre_s(data, id) {
+    listAppByCentre_s(id) {
         return __awaiter(this, void 0, void 0, function* () {
-            // Get users from database
             try {
                 const centreRepository = typeorm_1.getRepository(CentresModel_1.CentresModel);
                 console.log("THIS IS THE ID: " + id);
-                // const centre = await centreRepository.createQueryBuilder('CentresModel')
-                //     .leftJoinAndSelect('CentresModel.appointments', 'AppointmentsModel')
-                //     .where("CentresModel.id = :id", {id: id})
-                //     .andWhere("AppointmentsModel.isBooked = :isBooked", {isBooked: 1})
-                //     .getOne();
-                // const centres = await centreRepository.find({
-                //     relations: ["appointments"],
-                //     id: id,
-                //     isBooked: true
-                // });
-                const centre = yield centreRepository.findOne({
-                    join: { alias: 'centre', innerJoin: { appointments: 'centre.appointments' } },
-                    where: qb => {
-                        qb.where({
-                            id: id
-                        }).andWhere('appointments.isBooked = :isBooked', { isBooked: null });
-                    }
+                let centre = (yield centreRepository.findOne({
+                    relations: ["appointments"],
+                    where: { id }
+                }));
+                let appointments = centre.appointments.filter(appt => appt.isBooked == null);
+                console.log("TIME IN ISO IS: ", appointments[4].appointmentSlot);
+                let formatDate = moment_1.default(appointments[4].appointmentSlot).format('YYYY-MMM-DD HH:mm:ss');
+                console.log("FORMATTED TIME: ", formatDate);
+                let startDate = new Date("2020-07-15");
+                let endDate = new Date("2020-07-20");
+                let resultAppt = appointments.filter(appt => {
+                    let date = new Date(appt.appointmentSlot);
+                    return (date >= startDate && date <= endDate);
                 });
-                // const centre = await centreRepository.createQueryBuilder()
-                //     .select("centre.id", "id")
-                //     .addSelect(subQuery => {
-                //         return subQuery
-                //             .select("appointments.isBooked", "isBooked")
-                //             .from(AppointmentsModel, "AppointmentsModel")
-                //             .limit(1);
-                //     }, "name")
-                //     .from(CentresModel, "CentresModel")
-                //     .getOne();
-                // const centre = await centreRepository.findOne({
-                //     where: {id},
-                //     relations: ["appointments"]
-                // })
-                // const centre = await centreRepository.createQueryBuilder('CentresModel')
-                //     .leftJoinAndSelect('CentresModel.appointments', 'AppointmentsModel')
-                //     .where("CentresModel.id = :id", {id: id})
-                //     .orWhere("CentresModel.id = :id", {id: 92})
-                //     .getOne();
-                console.log("LOGGING SQL = ", centre);
-                return centre;
+                // let bt = appointments.filter(appt => appt.appointmentSlot)
+                console.log(centre);
+                console.log(appointments);
+                console.log(resultAppt);
+                return appointments;
             }
             catch (error) {
                 console.log("no centres found by town....");

@@ -3,6 +3,7 @@ import { getRepository } from 'typeorm';
 import { Request } from 'express';
 import {UserModel} from "../models/UserModel";
 import {AppointmentsModel} from "../models/AppointmentsModel";
+import moment from "moment";
 
 export class CentreService {
     async get(): Promise<CentresModel[] | null> {
@@ -87,63 +88,42 @@ export class CentreService {
         }
     }
 
-    async listAppByCentre_s(data, id): Promise<CentresModel | null> {
-        // Get users from database
+    async listAppByCentre_s(id) {
         try {
             const centreRepository = getRepository(CentresModel);
             console.log("THIS IS THE ID: " + id);
 
-            // const centre = await centreRepository.createQueryBuilder('CentresModel')
-            //     .leftJoinAndSelect('CentresModel.appointments', 'AppointmentsModel')
-            //     .where("CentresModel.id = :id", {id: id})
-            //     .andWhere("AppointmentsModel.isBooked = :isBooked", {isBooked: 1})
-            //     .getOne();
+            let centre = (await centreRepository.findOne({
+                relations: ["appointments"],
+                where: { id }
+            }))
+
+​
+            let appointments = centre.appointments.filter(appt => appt.isBooked == null);
+
+            console.log("TIME IN ISO IS: ", appointments[4].appointmentSlot);
+
+            let formatDate = moment(appointments[4].appointmentSlot).format('YYYY-MMM-DD HH:mm:ss');
+
+            console.log("FORMATTED TIME: ", formatDate);
+
+            let startDate = new Date("2020-07-15");
+            let endDate = new Date("2020-07-20");
 
 
-            // const centres = await centreRepository.find({
-            //     relations: ["appointments"],
-            //     id: id,
-            //     isBooked: true
-            // });
-
-            const centre = await centreRepository.findOne({
-                join: { alias: 'centre', innerJoin: { appointments: 'centre.appointments' } },
-                where: qb => {
-                    qb.where({
-                        id: id
-                    }).andWhere('appointments.isBooked = :isBooked', { isBooked: null });
-                }
+            let resultAppt = appointments.filter(appt => {
+                let date = new Date(appt.appointmentSlot);
+                return (date >= startDate && date <= endDate);
             });
 
-            // const centre = await centreRepository.createQueryBuilder()
-            //     .select("centre.id", "id")
-            //     .addSelect(subQuery => {
-            //         return subQuery
-            //             .select("appointments.isBooked", "isBooked")
-            //             .from(AppointmentsModel, "AppointmentsModel")
-            //             .limit(1);
-            //     }, "name")
-            //     .from(CentresModel, "CentresModel")
-            //     .getOne();
 
+            // let bt = appointments.filter(appt => appt.appointmentSlot)
 
+            console.log(centre);
+            console.log(appointments);
+            console.log(resultAppt)
 
-            // const centre = await centreRepository.findOne({
-            //     where: {id},
-            //     relations: ["appointments"]
-            // })
-
-
-            // const centre = await centreRepository.createQueryBuilder('CentresModel')
-            //     .leftJoinAndSelect('CentresModel.appointments', 'AppointmentsModel')
-            //     .where("CentresModel.id = :id", {id: id})
-            //     .orWhere("CentresModel.id = :id", {id: 92})
-            //     .getOne();
-
-
-            console.log("LOGGING SQL = ", centre);
-
-            return centre;
+            return appointments;
         }
         catch (error) {
             console.log("no centres found by town....");

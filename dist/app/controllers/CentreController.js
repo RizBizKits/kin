@@ -62,9 +62,9 @@ CentreController.listAppByCentre = (req, res, next) => {
     const { appointments } = req.body;
     console.log("your req is", appointments);
     // console.log("your req is", req.body);
-    serviceChunk.listAppByCentre_s(req.body, centreID).then(centre => {
-        if (centre) {
-            res.status(200).send({ centre });
+    serviceChunk.listAppByCentre_s(centreID).then(appointments => {
+        if (appointments) {
+            res.status(200).send(appointments);
             return console.log("user is created");
         }
     }).catch(err => {
