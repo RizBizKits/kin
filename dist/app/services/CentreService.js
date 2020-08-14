@@ -94,7 +94,7 @@ class CentreService {
             }
         });
     }
-    listAppByCentre_s(id) {
+    listAppByCentre_s(id, startD, endD) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 const centreRepository = typeorm_1.getRepository(CentresModel_1.CentresModel);
@@ -107,17 +107,32 @@ class CentreService {
                 console.log("TIME IN ISO IS: ", appointments[4].appointmentSlot);
                 let formatDate = moment_1.default(appointments[4].appointmentSlot).format('YYYY-MMM-DD HH:mm:ss');
                 console.log("FORMATTED TIME: ", formatDate);
-                let startDate = new Date("2020-07-15");
-                let endDate = new Date("2020-07-20");
+                console.log("START DATE: ", startD);
+                console.log("END DATE: ", endD);
+                let startDateFormatted = moment_1.default(startD).format("YYYY-MM-DD");
+                let endDateFormatted = moment_1.default(endD).format("YYYY-MM-DD");
+                console.log("FORMATTED START DATE: ", startDateFormatted);
+                console.log("FORMATTED END DATE: ", endDateFormatted);
+                let startDateFin = new Date(startDateFormatted);
+                let endDateFin = new Date(endDateFormatted);
                 let resultAppt = appointments.filter(appt => {
                     let date = new Date(appt.appointmentSlot);
-                    return (date >= startDate && date <= endDate);
+                    return (date >= startDateFin && date <= endDateFin);
                 });
-                // let bt = appointments.filter(appt => appt.appointmentSlot)
-                console.log(centre);
-                console.log(appointments);
-                console.log(resultAppt);
-                return appointments;
+                let results = resultAppt.map(date => moment_1.default(date.appointmentSlot).format('YYYY-MMM-DD HH:mm:ss'));
+                // let resultAppFormatted = resultAppt.forEach(appt => {
+                //     // let date = new Date(appt.appointmentSlot);
+                //     // return (date >= startDateFin && date <= endDateFin);
+                //     // let date = new Date(appt.appointmentSlot);
+                //     // console.log("app at: ", date);
+                //     return moment(appt.appointmentSlot).format('YYYY-MMM-DD HH:mm:ss');
+                //     // moment(date).format('YYYY-MMM-DD HH:mm:ss');
+                // });
+                //
+                // let results = resultAppt.map(date => moment(date.appointmentSlot).format('YYYY-MMM-DD HH:mm:ss'));
+                // console.log("available appts in correct format: ", results);
+                console.log("available appts", resultAppt);
+                return resultAppt;
             }
             catch (error) {
                 console.log("no centres found by town....");

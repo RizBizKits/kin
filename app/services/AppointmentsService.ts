@@ -70,9 +70,7 @@ export class AppointmentsService {
 
         try {
 
-            console.log("try in service");
-
-            const appID = data.id;
+            const appID = data.appointmentID;
             console.log("appointment id: ", appID);
 
             const appointmentRepo = getRepository(AppointmentsModel);
@@ -85,8 +83,6 @@ export class AppointmentsService {
             chosenAppointment.isBooked = true;
 
             const savedAppointment = await appointmentRepo.save(chosenAppointment);
-
-            console.log("done creating..");
 
             return savedAppointment;
 

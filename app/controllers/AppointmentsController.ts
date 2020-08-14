@@ -44,16 +44,14 @@ class AppointmentsController {
     public static addUserToApp = (req: Request, res: Response, next: any) => {
 
         const userID = req.params.id;
-        console.log("YOU REQ IS:::: ", req.body);
 
         serviceChunk.addUserToApp_s(req.body, userID).then(appointment => {
             if (appointment) {
                 res.status(200).send({appointment})
-                return console.log("user is created");
             }
         }).catch(err => {
             res.status(400).send({
-                error: 'A centre already exists...'
+                error: 'Sorry. The system could not book that!'
             })
         })
     }

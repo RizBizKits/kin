@@ -35,15 +35,16 @@ AppointmentsController.listByCentre = (req, res, next) => {
 };
 AppointmentsController.addUserToApp = (req, res, next) => {
     const userID = req.params.id;
-    console.log("YOU REQ IS:::: ", req.body);
+    console.log("CENTRE DETAIL USER ID: ", req.params.id);
+    console.log("CENTRE DETAIL PAGE APP ID: ", req.body.appointmentID);
     serviceChunk.addUserToApp_s(req.body, userID).then(appointment => {
         if (appointment) {
             res.status(200).send({ appointment });
-            return console.log("user is created");
+            return console.log("You have an appointment!");
         }
     }).catch(err => {
         res.status(400).send({
-            error: 'A centre already exists...'
+            error: 'Sorry. The system could not book that!'
         });
     });
 };

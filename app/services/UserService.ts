@@ -124,6 +124,30 @@ export class UserService {
 
             console.log("USER'S APP: ", appointment);
 
+
+            // await chosenUser.appointments.push(appointment);
+            // await chosenUser["appointments"].push(appointment);
+
+            // let app = []
+            //
+            // app.push(data)
+
+            // Object.entries(appointments);
+
+
+            // console.log(data.appointments);
+
+            //
+            // let obj = JSON.parse(data);
+            // await obj["appointments"].push(appointment);
+
+            // data["appointments"].push(appointment);
+            // chosenUser.appointments = data;
+
+            // chosenUser.appointments = data.appointments;
+            // chosenUser["appointments"].push(appointment);
+
+
             const savedUser = await userRepository.save(chosenUser);
 
             console.log("saved user in user model is: ", savedUser);

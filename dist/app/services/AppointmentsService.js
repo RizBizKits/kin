@@ -67,7 +67,7 @@ class AppointmentsService {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 console.log("try in service");
-                const appID = data.id;
+                const appID = data.appointmentID;
                 console.log("appointment id: ", appID);
                 const appointmentRepo = typeorm_1.getRepository(AppointmentsModel_1.AppointmentsModel);
                 const userRepository = typeorm_1.getRepository(UserModel_1.UserModel);

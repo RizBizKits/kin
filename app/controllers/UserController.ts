@@ -41,22 +41,20 @@ class UserController {
 
     public static bookUserAppointment = (req: Request, res: Response, next: any) => {
 
+        console.log("REQ FROM DETAIL PAGE", req.body);
 
-        const userID = req.params.id
-        const {appointments} = req.body
+        const userID = req.params.id;
 
-        console.log("your req is", appointments);
-
-        console.log("your req is", req.body);
+        console.log("USER ID FROM DETAIL PAGE", userID);
 
         serviceChunk.addAppointmentToUser(req.body, userID).then(user => {
             if (user) {
                 res.status(200).send({user})
-                return console.log("user is created");
+                return console.log("Appointment is booked for user");
             }
         }).catch(err => {
             res.status(400).send({
-                error: 'A centre already exists...'
+                error: 'Could not book appointment. System Error.'
             })
         })
     }

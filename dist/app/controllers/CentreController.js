@@ -59,17 +59,30 @@ CentreController.addCentre = (req, res, next) => {
 CentreController.listAppByCentre = (req, res, next) => {
     const centreID = req.params.id;
     const town = req.params.town;
-    const { appointments } = req.body;
-    console.log("your req is", appointments);
-    // console.log("your req is", req.body);
-    serviceChunk.listAppByCentre_s(centreID).then(appointments => {
-        if (appointments) {
+    // const {appointments} = req.body;
+    // const startD= req.query.pickedDates[0];
+    // const endD = req.query.pickedDates[1];
+    // const startD = dates.startD;
+    // const startE = dates.endD;
+    console.log("your req is", req.query.dates);
+    const startD = req.query.dates[0];
+    const endD = req.query.dates[1];
+    console.log("your start date is ", startD);
+    console.log("your end date is ", endD);
+    serviceChunk.listAppByCentre_s(centreID, startD, endD).then(appointments => {
+        if (appointments && appointments.length !== 0) {
             res.status(200).send(appointments);
             return console.log("user is created");
         }
+        else {
+            res.status(400).send({
+                error: "No appointments available for those dates."
+            });
+            // return console.log("user is created");
+        }
     }).catch(err => {
         res.status(400).send({
-            error: 'A centre already exists...'
+            error: 'System Error'
         });
     });
 };
