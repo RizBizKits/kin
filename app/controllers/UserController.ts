@@ -59,41 +59,22 @@ class UserController {
         })
     }
 
-    // public static fetchUserAppointments = (req: Request, res: Response, next: any) => {
-    //
-    //     const userID = req.params.id
-    //
-    //     serviceChunk.loadUserAppointments(req.body, userID).then(user => {
-    //         if (user) {
-    //             res.status(200).send({user})
-    //             return console.log("user is created");
-    //         }
-    //     }).catch(err => {
-    //         res.status(400).send({
-    //             error: 'A centre already exists...'
-    //         })
-    //     })
-    // }
+    public static loadUserAppointments = (req: Request, res: Response, next: any) => {
 
-    // public static addByUser = (req: Request, res: Response, next: any) => {
-    //
-    //
-    //     const {user, appointments} = req.body
-    //
-    //     console.log("your req is", req.body);
-    //     // console.dir("THE REQ USER IS: " + user + "AND THE APPOINTMENTS IS " + appointments);
-    //
-    //     serviceChunk.addAppointmentToUser(req.body).then(user => {
-    //         if (user) {
-    //             res.status(200).send({user})
-    //             return console.log("user is created");
-    //         }
-    //     }).catch(err => {
-    //         res.status(400).send({
-    //             error: 'A centre already exists...'
-    //         })
-    //     })
-    // }
+        const userID = req.params.id
+
+        serviceChunk.loadUserAppointments_s(userID).then(user => {
+            if (user) {
+                res.status(200).send({user})
+                return console.log("user is created");
+            }
+        }).catch(err => {
+            res.status(400).send({
+                error: 'A centre already exists...'
+            })
+        })
+    }
+
 }
 
 export default UserController;

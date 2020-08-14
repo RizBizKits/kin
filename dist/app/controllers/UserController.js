@@ -52,5 +52,18 @@ UserController.bookUserAppointment = (req, res, next) => {
         });
     });
 };
+UserController.loadUserAppointments = (req, res, next) => {
+    const userID = req.params.id;
+    serviceChunk.loadUserAppointments_s(userID).then(user => {
+        if (user) {
+            res.status(200).send({ user });
+            return console.log("user is created");
+        }
+    }).catch(err => {
+        res.status(400).send({
+            error: 'A centre already exists...'
+        });
+    });
+};
 exports.default = UserController;
 //# sourceMappingURL=UserController.js.map

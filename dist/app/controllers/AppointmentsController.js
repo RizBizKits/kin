@@ -35,12 +35,9 @@ AppointmentsController.listByCentre = (req, res, next) => {
 };
 AppointmentsController.addUserToApp = (req, res, next) => {
     const userID = req.params.id;
-    console.log("CENTRE DETAIL USER ID: ", req.params.id);
-    console.log("CENTRE DETAIL PAGE APP ID: ", req.body.appointmentID);
     serviceChunk.addUserToApp_s(req.body, userID).then(appointment => {
         if (appointment) {
             res.status(200).send({ appointment });
-            return console.log("You have an appointment!");
         }
     }).catch(err => {
         res.status(400).send({

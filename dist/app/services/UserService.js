@@ -20,9 +20,6 @@ class UserService {
                 const users = yield userRepository.find({
                     relations: ["appointments"]
                 });
-                // let classes = await this.find({
-                //     relations: [ "students" ]
-                // });
                 return users;
             }
             catch (error) {
@@ -104,29 +101,7 @@ class UserService {
                 // let obj = JSON.parse(data);
                 // obj["appointments"].push(appointment);
                 const savedAppointment = yield appointmentsRepo.insert(appointment);
-                console.log("appointment test printing: ");
-                console.log([appointment]);
-                console.log("CHOSEN USER: ", chosenUser);
-                console.log(typeof chosenUser);
-                console.log(typeof appointment);
-                console.log("USER'S APP: ", appointment);
-                // await chosenUser.appointments.push(appointment);
-                // await chosenUser["appointments"].push(appointment);
-                // let app = []
-                //
-                // app.push(data)
-                // Object.entries(appointments);
-                // console.log(data.appointments);
-                //
-                // let obj = JSON.parse(data);
-                // await obj["appointments"].push(appointment);
-                // data["appointments"].push(appointment);
-                // chosenUser.appointments = data;
-                // chosenUser.appointments = data.appointments;
-                // chosenUser["appointments"].push(appointment);
                 const savedUser = yield userRepository.save(chosenUser);
-                console.log("saved user in user model is: ", savedUser);
-                console.log("done creating..");
                 return savedUser;
             }
             catch (e) {
@@ -136,17 +111,13 @@ class UserService {
             }
         });
     }
-    loadUserAppointments(data) {
+    loadUserAppointments_s(id) {
         return __awaiter(this, void 0, void 0, function* () {
-            // Get users from database
             try {
                 const userRepository = typeorm_1.getRepository(UserModel_1.UserModel);
-                const users = yield userRepository.find({
+                const users = yield userRepository.findOne({
                     relations: ["appointments"]
                 });
-                // let classes = await this.find({
-                //     relations: [ "students" ]
-                // });
                 return users;
             }
             catch (error) {

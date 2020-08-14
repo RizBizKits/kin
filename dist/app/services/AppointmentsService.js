@@ -66,7 +66,6 @@ class AppointmentsService {
     addUserToApp_s(data, id) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                console.log("try in service");
                 const appID = data.appointmentID;
                 console.log("appointment id: ", appID);
                 const appointmentRepo = typeorm_1.getRepository(AppointmentsModel_1.AppointmentsModel);
@@ -76,7 +75,6 @@ class AppointmentsService {
                 chosenAppointment.user = chosenUser;
                 chosenAppointment.isBooked = true;
                 const savedAppointment = yield appointmentRepo.save(chosenAppointment);
-                console.log("done creating..");
                 return savedAppointment;
             }
             catch (e) {

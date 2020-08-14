@@ -91,7 +91,6 @@ export class CentreService {
     async listAppByCentre_s(id, startD, endD) {
         try {
             const centreRepository = getRepository(CentresModel);
-            console.log("THIS IS THE ID: " + id);
 
             let centre = (await centreRepository.findOne({
                 relations: ["appointments"],
