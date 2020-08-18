@@ -8,7 +8,8 @@ const routes = Router();
 
 // USERS
 routes.use('/user', userRoutes);
-routes.use('/centre', centreRoutes)
-routes.use('/appointments', appointmentsRoutes)
+routes.use('/centre', centreRoutes);
+routes.use('/appointments', appointmentsRoutes);
+
 
 export { routes };

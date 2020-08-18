@@ -98,7 +98,6 @@ class CentreService {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 const centreRepository = typeorm_1.getRepository(CentresModel_1.CentresModel);
-                console.log("THIS IS THE ID: " + id);
                 let centre = (yield centreRepository.findOne({
                     relations: ["appointments"],
                     where: { id }
@@ -119,7 +118,10 @@ class CentreService {
                     let date = new Date(appt.appointmentSlot);
                     return (date >= startDateFin && date <= endDateFin);
                 });
-                let results = resultAppt.map(date => moment_1.default(date.appointmentSlot).format('YYYY-MMM-DD HH:mm:ss'));
+                // let results = resultAppt.map(date => moment(date.appointmentSlot).format('YYYY-MMM-DD HH:mm:ss'));
+                let results = resultAppt.map(appt => {
+                    return Object.assign({}, appt, { dateAsString: moment_1.default(appt.appointmentSlot).format('YYYY-MMM-DD HH:mm:ss') });
+                });
                 // let resultAppFormatted = resultAppt.forEach(appt => {
                 //     // let date = new Date(appt.appointmentSlot);
                 //     // return (date >= startDateFin && date <= endDateFin);
@@ -131,8 +133,8 @@ class CentreService {
                 //
                 // let results = resultAppt.map(date => moment(date.appointmentSlot).format('YYYY-MMM-DD HH:mm:ss'));
                 // console.log("available appts in correct format: ", results);
-                console.log("available appts", resultAppt);
-                return resultAppt;
+                console.log("available appts", results);
+                return results;
             }
             catch (error) {
                 console.log("no centres found by town....");

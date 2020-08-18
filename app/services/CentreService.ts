@@ -96,25 +96,11 @@ export class CentreService {
                 relations: ["appointments"],
                 where: { id }
             }))
-
 ​
             let appointments = centre.appointments.filter(appt => appt.isBooked == null);
 
-            console.log("TIME IN ISO IS: ", appointments[4].appointmentSlot);
-
-            let formatDate = moment(appointments[4].appointmentSlot).format('YYYY-MMM-DD HH:mm:ss');
-
-
-            console.log("FORMATTED TIME: ", formatDate);
-            console.log("START DATE: ", startD);
-            console.log("END DATE: ", endD);
-
             let startDateFormatted = moment(startD).format("YYYY-MM-DD");
             let endDateFormatted = moment(endD).format("YYYY-MM-DD");
-
-            console.log("FORMATTED START DATE: ", startDateFormatted);
-            console.log("FORMATTED END DATE: ", endDateFormatted);
-
 
             let startDateFin = new Date(startDateFormatted);
             let endDateFin = new Date(endDateFormatted);
@@ -125,24 +111,14 @@ export class CentreService {
                 return (date >= startDateFin && date <= endDateFin);
             });
 
-            let results = resultAppt.map(date => moment(date.appointmentSlot).format('YYYY-MMM-DD HH:mm:ss'));
+            let results = resultAppt.map(appt => {
+                return {
+                    ...appt,
+                    dateAsString: moment(appt.appointmentSlot).format('YYYY-MMM-DD HH:mm:ss')
+                }
+            });
 
-
-            // let resultAppFormatted = resultAppt.forEach(appt => {
-            //     // let date = new Date(appt.appointmentSlot);
-            //     // return (date >= startDateFin && date <= endDateFin);
-            //     // let date = new Date(appt.appointmentSlot);
-            //     // console.log("app at: ", date);
-            //     return moment(appt.appointmentSlot).format('YYYY-MMM-DD HH:mm:ss');
-            //     // moment(date).format('YYYY-MMM-DD HH:mm:ss');
-            // });
-            //
-            // let results = resultAppt.map(date => moment(date.appointmentSlot).format('YYYY-MMM-DD HH:mm:ss'));
-            // console.log("available appts in correct format: ", results);
-
-            console.log("available appts", resultAppt);
-
-            return resultAppt;
+            return results;
         }
         catch (error) {
             console.log("no centres found by town....");

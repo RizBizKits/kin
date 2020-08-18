@@ -25,7 +25,6 @@ export class UserService {
 
             console.log("TRYING INDEX IN USER SERVICE....")
             const userRepository = getRepository(UserModel);
-            // const user = await userRepository.findByIds([data]);
             const user = await userRepository.findByIds([data],{
                 relations:["appointments"]
             });
@@ -75,13 +74,8 @@ export class UserService {
 
         try {
 
-            console.log("try in service");
-
             const userRepository = getRepository(UserModel);
             const appointmentsRepo = getRepository(AppointmentsModel);
-
-
-            // const {appointments} = data;
 
             console.log(typeof data)
             console.log(data.appointmentSlot);
@@ -99,14 +93,7 @@ export class UserService {
             console.log("TYPE OF APP:::");
 
             console.log(typeof chosenUser["appointments"]);
-            // chosenUser.appointments = [appointment];
-
             chosenUser.appointments.push(appointment);
-            // chosenUser.appointments.push(appointment);
-
-            // let obj = JSON.parse(data);
-            // obj["appointments"].push(appointment);
-
 
             const savedAppointment = await appointmentsRepo.insert(appointment);
 
@@ -115,7 +102,6 @@ export class UserService {
             return savedUser;
 
         } catch (e) {
-            console.log("CATCH IN SERVICE!!!  ")
             console.log(e);
             return Promise.reject(new Error("User already exists!"));
         }

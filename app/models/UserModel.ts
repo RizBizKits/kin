@@ -31,7 +31,7 @@ export class UserModel {
     @Column({nullable: true})
     public dob: Date
 
-    @Column({ nullable: true})
+    @Column({ nullable: true, default: 20})
     public points: number;
 
     @Column({nullable: true})
@@ -75,10 +75,7 @@ export class UserModel {
 
 
     public validateHashedPass(unencryptedPassword: string) {
-        // return bcrypt.compareSync(unencryptedPassword, this.password);
-
         return bcrypt.compareSync(unencryptedPassword, this.password); // true
-
     }
 
 }
