@@ -27,6 +27,10 @@ __decorate([
     __metadata("design:type", Boolean)
 ], AppointmentsModel.prototype, "isBooked", void 0);
 __decorate([
+    typeorm_1.Column({ default: null, nullable: true }),
+    __metadata("design:type", String)
+], AppointmentsModel.prototype, "pointsCode", void 0);
+__decorate([
     typeorm_1.ManyToOne(() => CentresModel_1.CentresModel, centres => centres.appointments),
     __metadata("design:type", CentresModel_1.CentresModel)
 ], AppointmentsModel.prototype, "centre", void 0);

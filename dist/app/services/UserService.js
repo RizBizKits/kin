@@ -33,7 +33,6 @@ class UserService {
             try {
                 console.log("TRYING INDEX IN USER SERVICE....");
                 const userRepository = typeorm_1.getRepository(UserModel_1.UserModel);
-                // const user = await userRepository.findByIds([data]);
                 const user = yield userRepository.findByIds([data], {
                     relations: ["appointments"]
                 });
@@ -71,7 +70,6 @@ class UserService {
                 return savedUser;
             }
             catch (e) {
-                console.log("CATCH IN SERVICE!!!  ");
                 console.log(e);
                 return Promise.reject(new Error("User already exists!"));
             }
@@ -80,10 +78,8 @@ class UserService {
     addAppointmentToUser(data, id) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                console.log("try in service");
                 const userRepository = typeorm_1.getRepository(UserModel_1.UserModel);
                 const appointmentsRepo = typeorm_1.getRepository(AppointmentsModel_1.AppointmentsModel);
-                // const {appointments} = data;
                 console.log(typeof data);
                 console.log(data.appointmentSlot);
                 const chosenUser = yield userRepository.findOne(id, { relations: ["appointments"] });
@@ -95,17 +91,12 @@ class UserService {
                 appointment.isBooked = true;
                 console.log("TYPE OF APP:::");
                 console.log(typeof chosenUser["appointments"]);
-                // chosenUser.appointments = [appointment];
                 chosenUser.appointments.push(appointment);
-                // chosenUser.appointments.push(appointment);
-                // let obj = JSON.parse(data);
-                // obj["appointments"].push(appointment);
                 const savedAppointment = yield appointmentsRepo.insert(appointment);
                 const savedUser = yield userRepository.save(chosenUser);
                 return savedUser;
             }
             catch (e) {
-                console.log("CATCH IN SERVICE!!!  ");
                 console.log(e);
                 return Promise.reject(new Error("User already exists!"));
             }
@@ -116,9 +107,29 @@ class UserService {
             try {
                 const userRepository = typeorm_1.getRepository(UserModel_1.UserModel);
                 const users = yield userRepository.findOne({
-                    relations: ["appointments"]
+                    relations: ["appointments"],
+                    where: { id }
                 });
                 return users;
+            }
+            catch (error) {
+                return null;
+            }
+        });
+    }
+    updatePoints_s(id) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const userRepository = typeorm_1.getRepository(UserModel_1.UserModel);
+                const user = yield userRepository.findOne({
+                    relations: ["appointments"],
+                    where: { id }
+                });
+                console.log("chosenUser: ", user);
+                user.points = 30;
+                console.log("chosenUser updated: ", user);
+                yield userRepository.update(id, Object.assign({}, user));
+                return user;
             }
             catch (error) {
                 return null;

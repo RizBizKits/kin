@@ -73,9 +73,11 @@ export class UserModel {
     }
 
 
-
     public validateHashedPass(unencryptedPassword: string) {
         return bcrypt.compareSync(unencryptedPassword, this.password); // true
     }
+
+
+
 
 }

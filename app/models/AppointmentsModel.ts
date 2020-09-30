@@ -19,6 +19,9 @@ export class AppointmentsModel {
     @Column({default: null, nullable: true})
     public isBooked: boolean;
 
+    @Column({default: null, nullable: true})
+    public pointsCode: string;
+
     @ManyToOne(() => CentresModel, centres => centres.appointments)
     public centre: CentresModel;
 

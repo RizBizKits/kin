@@ -65,5 +65,18 @@ UserController.loadUserAppointments = (req, res, next) => {
         });
     });
 };
+UserController.updatePoints = (req, res, next) => {
+    const userID = req.params.id;
+    serviceChunk.updatePoints_s(userID).then(user => {
+        if (user) {
+            res.status(200).send({ user, message: "User points have been updated" });
+            return console.log("User points have been updated");
+        }
+    }).catch(err => {
+        res.status(400).send({
+            error: 'System Error'
+        });
+    });
+};
 exports.default = UserController;
 //# sourceMappingURL=UserController.js.map

@@ -20,7 +20,6 @@ let UserModel = class UserModel {
         this.password = bcrypt.hashSync(this.password, 10);
     }
     validateHashedPass(unencryptedPassword) {
-        // return bcrypt.compareSync(unencryptedPassword, this.password);
         return bcrypt.compareSync(unencryptedPassword, this.password); // true
     }
 };
@@ -54,7 +53,7 @@ __decorate([
     __metadata("design:type", Date)
 ], UserModel.prototype, "dob", void 0);
 __decorate([
-    typeorm_1.Column({ nullable: true }),
+    typeorm_1.Column({ nullable: true, default: 20 }),
     __metadata("design:type", Number)
 ], UserModel.prototype, "points", void 0);
 __decorate([

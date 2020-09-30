@@ -17,10 +17,11 @@ AppointmentsController.listByUser = (req, res, next) => {
     const userID = req.params.id;
     serviceChunk.getByUserId(userID).then(appointments => {
         if (appointments) {
+            console.log("FOUND APPS HELD BY USER");
             res.status(200).send({ appointments });
         }
     }).catch((err) => {
-        next(new Error('No appointments found...'));
+        next(new Error('You have 0 upcoming appointments'));
     });
 };
 AppointmentsController.listByCentre = (req, res, next) => {
@@ -31,6 +32,31 @@ AppointmentsController.listByCentre = (req, res, next) => {
         }
     }).catch((err) => {
         next(new Error('No appointments found...'));
+    });
+};
+AppointmentsController.valPoints = (req, res, next) => {
+    const apptID = req.params.id;
+    // let codee = req.query.code;
+    let code = req.query.code;
+    let p = JSON.parse(code);
+    let pointsCode = p.pointsCode;
+    console.log("apptID is: ", apptID);
+    console.log("code is: ", pointsCode);
+    serviceChunk.valPoints_s(apptID, pointsCode).then(point => {
+        res.status(200).send({
+            message: "Your points have been updated!"
+        });
+        return console.log("points updates");
+        // if (point) {
+        //     res.status(200).send({
+        //         message: "Your points have been updated!"
+        //     })
+        //     return console.log("points updates");
+        // }
+    }).catch(err => {
+        res.status(400).send({
+            error: 'System Error'
+        });
     });
 };
 AppointmentsController.addUserToApp = (req, res, next) => {

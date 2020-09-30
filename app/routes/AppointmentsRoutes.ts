@@ -6,6 +6,7 @@ const router = Router();
 // Get all users
 router.get('/', AppointmentsController.listAll);
 router.get('/:id', AppointmentsController.listByUser);
+router.get('/:id/points', AppointmentsController.valPoints);
 
 router.post('/:id', AppointmentsController.addUserToApp);
 

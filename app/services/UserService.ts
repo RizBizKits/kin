@@ -65,7 +65,6 @@ export class UserService {
             return savedUser;
 
         } catch (e) {
-            console.log("CATCH IN SERVICE!!!  ")
             console.log(e);
             return Promise.reject(new Error("User already exists!"));
         }
@@ -112,7 +111,8 @@ export class UserService {
         try {
             const userRepository = getRepository(UserModel);
             const users = await userRepository.findOne({
-                relations: [ "appointments" ]
+                relations: [ "appointments" ],
+                where: { id }
             });
 
             return users;
@@ -122,5 +122,25 @@ export class UserService {
         }
     }
 
+    async updatePoints_s(id){
+        try {
+            const userRepository = getRepository(UserModel);
+            const user = await userRepository.findOne({
+                relations: [ "appointments" ],
+                where: { id }
+            });
+
+            console.log("chosenUser: ", user);
+            user.points = 30;
+            console.log("chosenUser updated: ", user);
+
+            await userRepository.update(id, {...user});
+            return user;
+
+        }
+        catch (error) {
+            return null
+        }
+    }
 
 }

@@ -103,37 +103,17 @@ class CentreService {
                     where: { id }
                 }));
                 let appointments = centre.appointments.filter(appt => appt.isBooked == null);
-                console.log("TIME IN ISO IS: ", appointments[4].appointmentSlot);
-                let formatDate = moment_1.default(appointments[4].appointmentSlot).format('YYYY-MMM-DD HH:mm:ss');
-                console.log("FORMATTED TIME: ", formatDate);
-                console.log("START DATE: ", startD);
-                console.log("END DATE: ", endD);
                 let startDateFormatted = moment_1.default(startD).format("YYYY-MM-DD");
                 let endDateFormatted = moment_1.default(endD).format("YYYY-MM-DD");
-                console.log("FORMATTED START DATE: ", startDateFormatted);
-                console.log("FORMATTED END DATE: ", endDateFormatted);
                 let startDateFin = new Date(startDateFormatted);
                 let endDateFin = new Date(endDateFormatted);
                 let resultAppt = appointments.filter(appt => {
                     let date = new Date(appt.appointmentSlot);
                     return (date >= startDateFin && date <= endDateFin);
                 });
-                // let results = resultAppt.map(date => moment(date.appointmentSlot).format('YYYY-MMM-DD HH:mm:ss'));
                 let results = resultAppt.map(appt => {
                     return Object.assign({}, appt, { dateAsString: moment_1.default(appt.appointmentSlot).format('YYYY-MMM-DD HH:mm:ss') });
                 });
-                // let resultAppFormatted = resultAppt.forEach(appt => {
-                //     // let date = new Date(appt.appointmentSlot);
-                //     // return (date >= startDateFin && date <= endDateFin);
-                //     // let date = new Date(appt.appointmentSlot);
-                //     // console.log("app at: ", date);
-                //     return moment(appt.appointmentSlot).format('YYYY-MMM-DD HH:mm:ss');
-                //     // moment(date).format('YYYY-MMM-DD HH:mm:ss');
-                // });
-                //
-                // let results = resultAppt.map(date => moment(date.appointmentSlot).format('YYYY-MMM-DD HH:mm:ss'));
-                // console.log("available appts in correct format: ", results);
-                console.log("available appts", results);
                 return results;
             }
             catch (error) {
