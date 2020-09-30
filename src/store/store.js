@@ -24,7 +24,6 @@ export default new Vuex.Store({
             } else {
                 state.isLoggedIn = false;
             }
-            // state.isLoggedIn = !!(token)
         },
         setUser (state, user) {
             state.user = user
@@ -39,3 +38,4 @@ export default new Vuex.Store({
         }
     }
 })
+

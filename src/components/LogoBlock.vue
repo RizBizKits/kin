@@ -16,7 +16,5 @@
         margin: 60px 0 30px;
     }
 
-    .bg-purple {
-        background-color: #232528;
-    }
 </style>
+

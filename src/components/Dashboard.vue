@@ -168,7 +168,7 @@
     }
 
     .yellow-bg {
-        background-color: #FFA400;
+        background-color: #FFCE39;
         color: black;
     }
 
